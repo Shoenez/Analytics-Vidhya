@@ -9,6 +9,7 @@ train <- read.csv("train_aj.csv")
 test <- read.csv("test_v2.csv")
 subm <- read.csv('s_sub.csv')
 train_new <- train[complete.cases(train),]
+test_new <- test
 
 # Binary variables for gender
 train_new$Female <- ifelse(train_new$gender=="Female",1,0)
@@ -43,32 +44,32 @@ train_new <- subset(train_new, select = -smoking_status)
 
 
 # Same for test data
-test$Female <- ifelse(test$gender=="Female",1,0)
-test$Male <- ifelse(test$gender=="Male",1,0)
-test$Other <- ifelse(test$gender=="Other",1,0)
-test <- subset(test, select = -gender)
-levels(test$ever_married) <- c(0,1)
-test$children <- ifelse(test$work_type=="children",1,0)
-test$Govt_job <- ifelse(test$work_type=="Govt_job",1,0)
-test$Never_worked <- ifelse(test$work_type=="Never_worked",1,0)
-test$Private <- ifelse(test$work_type=="Private",1,0)
-test$Self_employed <- ifelse(test$work_type=="Self-employed",1,0)
-test <- subset(test, select = -work_type)
-test$Urban <- ifelse(test$Residence_type=="Urban",1,0)
-test$Rural <- ifelse(test$Residence_type=="Rural",1,0)
-test <- subset(test, select = -Residence_type)
-test$formerly_smoked <- ifelse(test$smoking_status=="formerly smoked",1,0)
-test$never_smoked <- ifelse(test$smoking_status=="never smoked",1,0)
-test$smokes <- ifelse(test$smoking_status=="smokes",1,0)
-test <- subset(test, select = -smoking_status)
-test <- test %>% replace(is.na(.), 0)
+test_new$Female <- ifelse(test_new$gender=="Female",1,0)
+test_new$Male <- ifelse(test_new$gender=="Male",1,0)
+test_new$Other <- ifelse(test_new$gender=="Other",1,0)
+test_new <- subset(test_new, select = -gender)
+levels(test_new$ever_married) <- c(0,1)
+test_new$children <- ifelse(test_new$work_type=="children",1,0)
+test_new$Govt_job <- ifelse(test_new$work_type=="Govt_job",1,0)
+test_new$Never_worked <- ifelse(test_new$work_type=="Never_worked",1,0)
+test_new$Private <- ifelse(test_new$work_type=="Private",1,0)
+test_new$Self_employed <- ifelse(test_new$work_type=="Self-employed",1,0)
+test_new <- subset(test_new, select = -work_type)
+test_new$Urban <- ifelse(test_new$Residence_type=="Urban",1,0)
+test_new$Rural <- ifelse(test_new$Residence_type=="Rural",1,0)
+test_new <- subset(test_new, select = -Residence_type)
+test_new$formerly_smoked <- ifelse(test_new$smoking_status=="formerly smoked",1,0)
+test_new$never_smoked <- ifelse(test_new$smoking_status=="never smoked",1,0)
+test_new$smokes <- ifelse(test_new$smoking_status=="smokes",1,0)
+test_new <- subset(test_new, select = -smoking_status)
+test_new <- test_new %>% replace(is.na(.), 0)
 
 write.csv(train_new, 'train_new.csv', row.names = FALSE)
-write.csv(test, 'test_new.csv', row.names = FALSE)
+write.csv(test_new, 'test_new.csv', row.names = FALSE)
 ######################################################################################
 train_x <- subset(train_new, select = -c(stroke,id))
 train_y <- train_new$stroke
-test_x <- subset(test, select = -c(id))
+test_x <- subset(test_new, select = -c(id))
 ######################################################################################
 
 model_keras <- keras_model_sequential()
